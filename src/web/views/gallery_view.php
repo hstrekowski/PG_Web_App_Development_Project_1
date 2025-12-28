@@ -1,6 +1,5 @@
 <section class="upload-section">
-    <h2>Dodaj nowe zdjęcie</h2>
-    
+    <h2>Dodaj zdjęcie</h2>
     <?php if (isset($model['messages'])): ?>
         <div class="messages">
             <?php foreach ($model['messages'] as $msg): ?>
@@ -13,21 +12,34 @@
 
     <form action="index.php?action=upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="photo" required>
-        <button type="submit">Wyślij na serwer</button>
-        <small>Dozwolone: JPG, PNG. Max: 1MB.</small>
+        <button type="submit">Wyślij</button>
+        <small>Max 1MB, JPG/PNG</small>
     </form>
 </section>
 
 <hr class="divider">
 
 <div class="gallery-container">
-    <div class="photo-placeholder">1</div>
-    <div class="photo-placeholder">2</div>
-    <div class="photo-placeholder">3</div>
-    <div class="photo-placeholder">4</div>
-    <div class="photo-placeholder">5</div>
-    <div class="photo-placeholder">6</div>
-    <div class="photo-placeholder">7</div>
-    <div class="photo-placeholder">8</div>
-    <div class="photo-placeholder">9</div>
+    <?php if (!empty($model['images'])): ?>
+        <?php foreach ($model['images'] as $img): ?>
+            <div class="photo-item">
+                <a href="images/<?php echo $img['original_name']; ?>" target="_blank">
+                    <img src="images/<?php echo $img['thumbnail_name']; ?>" alt="Foto">
+                </a>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p style="grid-column: 1/-1; text-align: center;">Brak zdjęć w bazie.</p>
+    <?php endif; ?>
 </div>
+
+<?php if (isset($model['total_pages']) && $model['total_pages'] > 1): ?>
+    <div style="text-align: center; margin-top: 20px;">
+        <?php for ($i = 1; $i <= $model['total_pages']; $i++): ?>
+            <a href="index.php?page=<?php echo $i; ?>" 
+               style="padding: 5px 10px; margin: 0 2px; background: <?php echo $i == $model['page'] ? '#333' : '#ddd'; ?>; color: <?php echo $i == $model['page'] ? '#fff' : '#000'; ?>; text-decoration: none;">
+               <?php echo $i; ?>
+            </a>
+        <?php endfor; ?>
+    </div>
+<?php endif; ?>

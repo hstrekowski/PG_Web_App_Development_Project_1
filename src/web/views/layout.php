@@ -2,13 +2,12 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Galeria Książek</title>
+    <title>Projekt Galeria</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-
     <header>
-        <h1>Galeria Książek</h1>
+        <h1>Galeria Zdjęć (MongoDB)</h1>
     </header>
 
     <main>
@@ -16,8 +15,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Hubert Strękowski 208381</p>
+        <p>&copy; 2025 Projekt WAI</p>
     </footer>
-
 </body>
 </html>
