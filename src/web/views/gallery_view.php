@@ -38,6 +38,16 @@
         <?php endif; ?>
     </div>
 
+    <?php if (isset($model['total_pages']) && $model['total_pages'] > 1): ?>
+        <div class="pagination">
+            <?php for ($i = 1; $i <= $model['total_pages']; $i++): ?>
+                <a href="index.php?page=<?php echo $i; ?>" class="<?php echo $i == $model['page'] ? 'active' : ''; ?>">
+                   <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+        </div>
+    <?php endif; ?>
+
 </form>
 
 <hr class="divider">
@@ -62,13 +72,3 @@
         <small>Max 1MB, JPG/PNG</small>
     </form>
 </section>
-
-<?php if (isset($model['total_pages']) && $model['total_pages'] > 1): ?>
-    <div class="pagination">
-        <?php for ($i = 1; $i <= $model['total_pages']; $i++): ?>
-            <a href="index.php?page=<?php echo $i; ?>" class="<?php echo $i == $model['page'] ? 'active' : ''; ?>">
-               <?php echo $i; ?>
-            </a>
-        <?php endfor; ?>
-    </div>
-<?php endif; ?>
