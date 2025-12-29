@@ -7,7 +7,6 @@ function gallery_action() {
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
     
-    // Ustawienie: 3 zdjęcia na stronę
     $perPage = 3; 
     
     $data = get_paginated_images($page, $perPage);
@@ -23,10 +22,15 @@ function gallery_action() {
 function upload_action() {
     $model = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
-        $model['messages'] = upload_image_business_logic($_FILES['photo']);
+        // Pobieramy tytuł i autora z formularza
+        $title = $_POST['title'] ?? 'Bez tytułu';
+        $author = $_POST['author'] ?? 'Nieznany';
+
+        // Przekazujemy je do funkcji biznesowej
+        $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author);
     }
     
-    // Po uploadzie wracamy na 1. stronę galerii
+    // Po uploadzie wracamy na 1. stronę
     $data = get_paginated_images(1, 3);
     $model['images'] = $data['images'];
     $model['page'] = 1;

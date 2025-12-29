@@ -1,13 +1,13 @@
 <?php
 // business.php
 
-// 1. AUTOLOAD - Szukamy biblioteki w różnych miejscach
+// 1. AUTOLOAD
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
     require_once __DIR__ . '/../../vendor/autoload.php';
 } else {
-    die("Błąd: Nie znaleziono biblioteki MongoDB (vendor/autoload.php).");
+    die("Błąd: Nie znaleziono biblioteki MongoDB.");
 }
 
 // 2. POŁĄCZENIE Z BAZĄ
@@ -26,7 +26,7 @@ function get_db() {
     }
 }
 
-// 3. GENEROWANIE MINIATURKI (GD)
+// 3. MINIATURKI (bez zmian)
 function createThumbnail($sourcePath, $destPath, $fileType) {
     list($width, $height) = getimagesize($sourcePath);
     $newWidth = 200;
@@ -56,8 +56,8 @@ function createThumbnail($sourcePath, $destPath, $fileType) {
     return true;
 }
 
-// 4. UPLOAD PLIKU
-function upload_image_business_logic($file) {
+// 4. UPLOAD (Zmiana: dodano $title i $author)
+function upload_image_business_logic($file, $title, $author) {
     $messages = [];
     $uploadDir = 'images/';
 
@@ -81,9 +81,12 @@ function upload_image_business_logic($file) {
             
             try {
                 $db = get_db();
+                // ZAPIS DANYCH ORAZ TYTUŁU I AUTORA
                 $db->images->insertOne([
                     'original_name' => $fileName,
-                    'thumbnail_name' => $thumbName
+                    'thumbnail_name' => $thumbName,
+                    'title' => $title,
+                    'author' => $author
                 ]);
                 $messages[] = "Sukces: Zdjęcie zapisane w bazie!";
             } catch (Exception $e) {
@@ -96,7 +99,7 @@ function upload_image_business_logic($file) {
     return $messages;
 }
 
-// 5. POBIERANIE DANYCH (PAGINACJA)
+// 5. PAGINACJA (bez zmian)
 function get_paginated_images($page, $perPage) {
     try {
         $db = get_db();
@@ -110,7 +113,6 @@ function get_paginated_images($page, $perPage) {
         
         $cursor = $db->images->find([], $options);
         
-        // Kompatybilność z różnymi wersjami biblioteki
         if (method_exists($db->images, 'countDocuments')) {
             $total = $db->images->countDocuments();
         } else {

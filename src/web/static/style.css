@@ -1,3 +1,4 @@
+/* Reset i podstawowe ustawienia */
 * {
     margin: 0;
     padding: 0;
@@ -10,23 +11,33 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #f4f4f4;
+    color: #333;
 }
 
+/* Header i Footer */
 header {
     background-color: #333;
     color: white;
     padding: 20px;
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
 }
 
 footer {
     padding: 20px;
     background-color: #333;
-    color: white;
+    color: #ccc;
     text-align: center;
     margin-top: auto;
+    font-size: 14px;
 }
 
+/* Główny kontener */
 main {
     flex: 1;
     display: flex;
@@ -38,48 +49,94 @@ main {
     margin: 0 auto;
 }
 
+/* Sekcja Uploadu */
 .upload-section {
     background: white;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    margin-bottom: 20px;
+    max-width: 600px;
+    /* Węższy formularz wygląda lepiej */
+    margin-bottom: 30px;
     text-align: center;
+}
+
+.upload-section h2 {
+    margin-bottom: 20px;
+    color: #444;
 }
 
 .upload-section form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     align-items: center;
-    margin-top: 15px;
+    gap: 15px;
+}
+
+/* Style dla etykiet i pól tekstowych */
+.upload-section label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 400px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+}
+
+.upload-section input[type="text"],
+.upload-section input[type="file"] {
+    margin-top: 5px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.upload-section input[type="text"]:focus {
+    border-color: #28a745;
+    outline: none;
 }
 
 .upload-section button {
-    padding: 10px 20px;
+    margin-top: 10px;
+    padding: 12px 30px;
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 400px;
 }
 
 .upload-section button:hover {
     background-color: #218838;
 }
 
+.upload-section small {
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Komunikaty błędów i sukcesu */
 .messages {
-    margin-bottom: 15px;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .messages p {
-    padding: 10px;
-    margin-bottom: 5px;
+    padding: 12px;
+    margin-bottom: 8px;
     border-radius: 4px;
-    font-weight: bold;
+    font-size: 14px;
+    text-align: left;
 }
 
 .error {
@@ -94,32 +151,93 @@ main {
     border: 1px solid #c3e6cb;
 }
 
+/* Linia oddzielająca */
 .divider {
     width: 100%;
     border: 0;
-    border-top: 1px solid #ccc;
-    margin: 20px 0;
+    border-top: 1px solid #ddd;
+    margin: 10px 0 30px 0;
 }
 
+/* Siatka Galerii (Grid) */
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    /* 3 kolumny */
+    gap: 20px;
     width: 100%;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Pojedynczy kafelek ze zdjęciem */
+.photo-item {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Układa zdjęcie i tekst w pionie */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.photo-item:hover {
+    transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.photo-placeholder {
-    aspect-ratio: 1 / 1;
-    background-color: #ddd;
-    border: 2px dashed #bbb;
-    border-radius: 4px;
+/* Obszar obrazka */
+.photo-item a {
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 20px;
-    color: #888;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 10px;
+    width: 100%;
+    min-height: 150px;
+    /* Minimalna wysokość, żeby puste kafelki nie znikały */
+}
+
+.photo-item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 2px;
+}
+
+/* Informacje pod zdjęciem (Tytuł/Autor) */
+.photo-info {
+    padding: 12px;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fff;
+    flex-grow: 1;
+    /* Rozciąga tło, jeśli kafelki mają różną wysokość */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.photo-info strong {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.photo-info small {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Responsywność (RWD) - dla telefonów */
+@media (max-width: 600px) {
+    .gallery-container {
+        grid-template-columns: 1fr;
+        /* Jedna kolumna na małych ekranach */
+    }
 }

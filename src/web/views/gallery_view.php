@@ -11,6 +11,13 @@
     <?php endif; ?>
 
     <form action="index.php?action=upload" method="POST" enctype="multipart/form-data">
+        <label>
+            Tytuł: <input type="text" name="title" required placeholder="np. Wakacje 2024">
+        </label>
+        <label>
+            Autor: <input type="text" name="author" required placeholder="np. Jan Kowalski" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'] : ''; ?>"> 
+            </label>
+        
         <input type="file" name="photo" required>
         <button type="submit">Wyślij</button>
         <small>Max 1MB, JPG/PNG</small>
@@ -26,6 +33,16 @@
                 <a href="images/<?php echo $img['original_name']; ?>" target="_blank">
                     <img src="images/<?php echo $img['thumbnail_name']; ?>" alt="Foto">
                 </a>
+                
+                <div class="photo-info">
+                    <?php 
+                    // Używamy htmlspecialchars dla bezpieczeństwa (ochrona przed XSS)
+                    $title = isset($img['title']) ? htmlspecialchars($img['title']) : 'Brak tytułu';
+                    $author = isset($img['author']) ? htmlspecialchars($img['author']) : 'Anonim';
+                    ?>
+                    <strong><?php echo $title; ?></strong><br>
+                    <small>Autor: <?php echo $author; ?></small>
+                </div>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
