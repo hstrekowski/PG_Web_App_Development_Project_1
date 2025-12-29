@@ -1,4 +1,4 @@
-/* Reset i podstawowe ustawienia */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -6,104 +6,179 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f4f4f4;
     color: #333;
 }
 
-/* Header i Footer */
+/* --- HEADER --- */
 header {
-    background-color: #333;
+    background-color: #222;
     color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 70px;
+    display: flex;
+    /* Centruje kontener w pionie */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-header h1 {
+.header-container {
+    /* ROZCIĄGNIĘCIE NA CAŁĄ SZEROKOŚĆ */
+    width: 100%;
+    padding: 0 40px;
+    /* Marginesy od krawędzi ekranu */
+
+    /* UKŁAD GRID: LEWO - ŚRODEK - PRAWO */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 100%;
+}
+
+/* 1. LEWA STRONA */
+.header-left {
+    justify-self: start;
+    /* Przyklej do lewej */
+    display: flex;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.username {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* 2. ŚRODEK */
+.header-center {
+    justify-self: center;
+    /* Przyklej do środka */
+}
+
+.site-title {
+    color: white;
+    text-decoration: none;
     font-size: 24px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    white-space: nowrap;
 }
 
-footer {
-    padding: 20px;
-    background-color: #333;
+/* 3. PRAWA STRONA */
+.header-right {
+    justify-self: end;
+    /* Przyklej do prawej */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.link-text {
     color: #ccc;
-    text-align: center;
-    margin-top: auto;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.link-text:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.btn-logout {
+    background-color: #d9534f;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
     font-size: 14px;
 }
 
-/* Główny kontener */
+.btn-logout:hover {
+    background-color: #c9302c;
+}
+
+/* --- RESZTA STRONY --- */
 main {
     flex: 1;
+    width: 100%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
 }
 
-/* Sekcja Uploadu */
-.upload-section {
+footer {
+    background: #222;
+    color: #777;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+    font-size: 12px;
+}
+
+/* Formularze */
+.upload-section,
+.auth-section {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;
-    /* Węższy formularz wygląda lepiej */
+    max-width: 450px;
     margin-bottom: 30px;
     text-align: center;
 }
 
-.upload-section h2 {
+.upload-section h2,
+.auth-section h2 {
     margin-bottom: 20px;
     color: #444;
 }
 
-.upload-section form {
+form {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 15px;
 }
 
-/* Style dla etykiet i pól tekstowych */
-.upload-section label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    max-width: 400px;
-    font-weight: bold;
+label {
+    font-weight: 600;
+    text-align: left;
     font-size: 14px;
     color: #555;
 }
 
-.upload-section input[type="text"],
-.upload-section input[type="file"] {
-    margin-top: 5px;
+input {
     padding: 10px;
-    width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
+    width: 100%;
 }
 
-.upload-section input[type="text"]:focus {
-    border-color: #28a745;
-    outline: none;
-}
-
-.upload-section button {
-    margin-top: 10px;
-    padding: 12px 30px;
+button {
+    padding: 12px;
     background-color: #28a745;
     color: white;
     border: none;
@@ -111,133 +186,88 @@ main {
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition: background-color 0.3s;
-    width: 100%;
-    max-width: 400px;
 }
 
-.upload-section button:hover {
+button:hover {
     background-color: #218838;
 }
 
-.upload-section small {
-    color: #888;
-    margin-top: 5px;
-}
-
-/* Komunikaty błędów i sukcesu */
-.messages {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.messages p {
-    padding: 12px;
-    margin-bottom: 8px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: left;
-}
-
-.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-/* Linia oddzielająca */
-.divider {
-    width: 100%;
-    border: 0;
-    border-top: 1px solid #ddd;
-    margin: 10px 0 30px 0;
-}
-
-/* Siatka Galerii (Grid) */
+/* Galeria */
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* 3 kolumny */
     gap: 20px;
     width: 100%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Pojedynczy kafelek ze zdjęciem */
 .photo-item {
-    background-color: #fff;
+    background: white;
     border: 1px solid #eee;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    /* Układa zdjęcie i tekst w pionie */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
 }
 
-.photo-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Obszar obrazka */
 .photo-item a {
+    background: #f9f9f9;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
-    padding: 10px;
-    width: 100%;
-    min-height: 150px;
-    /* Minimalna wysokość, żeby puste kafelki nie znikały */
+    min-height: 180px;
+    flex-grow: 1;
 }
 
 .photo-item img {
     max-width: 100%;
     height: auto;
-    display: block;
-    border-radius: 2px;
 }
 
-/* Informacje pod zdjęciem (Tytuł/Autor) */
 .photo-info {
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     border-top: 1px solid #f0f0f0;
-    background-color: #fff;
-    flex-grow: 1;
-    /* Rozciąga tło, jeśli kafelki mają różną wysokość */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    background: #fff;
 }
 
-.photo-info strong {
-    font-size: 15px;
-    color: #222;
-    margin-bottom: 4px;
-    display: block;
+.divider {
+    width: 100%;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
 }
 
-.photo-info small {
-    font-size: 12px;
-    color: #666;
+/* Komunikaty */
+.messages p,
+.error,
+.success {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    text-align: left;
 }
 
-/* Responsywność (RWD) - dla telefonów */
-@media (max-width: 600px) {
-    .gallery-container {
-        grid-template-columns: 1fr;
-        /* Jedna kolumna na małych ekranach */
-    }
+.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 2px;
+    background: #eee;
+    color: #333;
+    text-decoration: none;
 }

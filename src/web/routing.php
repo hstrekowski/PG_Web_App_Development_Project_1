@@ -1,9 +1,20 @@
 <?php
 function dispatch($url) {
-    if ($url == '/upload') {
-        upload_action();
-    } else {
-        gallery_action();
+    switch ($url) {
+        case '/upload':
+            upload_action();
+            break;
+        case '/register':
+            register_action();
+            break;
+        case '/login':
+            login_action();
+            break;
+        case '/logout':
+            logout_action();
+            break;
+        default:
+            gallery_action();
     }
 }
 ?>
