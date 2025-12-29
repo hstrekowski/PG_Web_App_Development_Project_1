@@ -1,7 +1,7 @@
 <?php
 require_once 'business.php';
 
-// 1. GALERIA (Zmiana: przekazuje koszyk do widoku)
+// 1. GALERIA
 function gallery_action() {
     $model = [];
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -14,24 +14,38 @@ function gallery_action() {
     $model['page'] = $page;
     $model['total_pages'] = ceil($data['total'] / $perPage);
     
-    // Przekazujemy koszyk, żeby widok wiedział co jest zaznaczone
+    // Przekazujemy koszyk
     $model['cart'] = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
     
     $view_name = 'gallery_view';
     include 'views/layout.php'; 
 }
 
-// 2. UPLOAD
+// 2. UPLOAD (NAPRAWIONE WYŚWIETLANIE BŁĘDÓW)
 function upload_action() {
     $model = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         $title = $_POST['title'] ?? 'Bez tytułu';
         $author = $_POST['author'] ?? 'Nieznany';
+        
+        // Tutaj generują się błędy lub sukces
         $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author);
     }
-    // Powrót do galerii po uploadzie
-    header("Location: index.php");
-    exit;
+    
+    // --- ZMIANA: Zamiast redirectu, ładujemy dane galerii i widok ---
+    // Dzięki temu zmienna $model['messages'] przetrwa i zostanie wyświetlona
+    
+    $page = 1; // Po uploadzie wracamy na pierwszą stronę
+    $perPage = 3;
+    $data = get_paginated_images($page, $perPage);
+    
+    $model['images'] = $data['images'];
+    $model['page'] = $page;
+    $model['total_pages'] = ceil($data['total'] / $perPage);
+    $model['cart'] = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+    
+    $view_name = 'gallery_view';
+    include 'views/layout.php';
 }
 
 // 3. REJESTRACJA
@@ -87,7 +101,7 @@ function logout_action() {
     exit;
 }
 
-// 6. DODAWANIE DO KOSZYKA (Zapamiętaj wybrane)
+// 6. KOSZYK - ZAPAMIĘTAJ
 function save_selected_action() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selected_ids'])) {
         if (!isset($_SESSION['cart'])) {
@@ -95,7 +109,7 @@ function save_selected_action() {
         }
         foreach ($_POST['selected_ids'] as $id) {
             if (!isset($_SESSION['cart'][$id])) {
-                $_SESSION['cart'][$id] = 1; // Domyślna ilość: 1
+                $_SESSION['cart'][$id] = 1; 
             }
         }
     }
@@ -103,7 +117,7 @@ function save_selected_action() {
     exit;
 }
 
-// 7. WIDOK KOSZYKA (Wyświetl zapamiętane)
+// 7. KOSZYK - WIDOK
 function saved_action() {
     $model = [];
     $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
@@ -125,16 +139,14 @@ function saved_action() {
     include 'views/layout.php';
 }
 
-// 8. AKTUALIZACJA KOSZYKA (Usuwanie / Zmiana ilości)
+// 8. KOSZYK - USUWANIE/ZMIANA
 function remove_selected_action() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Usuwanie
         if (isset($_POST['remove_ids'])) {
             foreach ($_POST['remove_ids'] as $id) {
                 unset($_SESSION['cart'][$id]);
             }
         }
-        // Zmiana ilości
         if (isset($_POST['quantities'])) {
             foreach ($_POST['quantities'] as $id => $qty) {
                 if (isset($_SESSION['cart'][$id]) && (int)$qty > 0) {
