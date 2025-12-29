@@ -1,6 +1,7 @@
 <?php
 require_once 'business.php';
 
+// 1. GALERIA (Zmiana: przekazuje koszyk do widoku)
 function gallery_action() {
     $model = [];
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -8,14 +9,19 @@ function gallery_action() {
     $perPage = 3; 
     
     $data = get_paginated_images($page, $perPage);
+    
     $model['images'] = $data['images'];
     $model['page'] = $page;
     $model['total_pages'] = ceil($data['total'] / $perPage);
+    
+    // Przekazujemy koszyk, żeby widok wiedział co jest zaznaczone
+    $model['cart'] = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
     
     $view_name = 'gallery_view';
     include 'views/layout.php'; 
 }
 
+// 2. UPLOAD
 function upload_action() {
     $model = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
@@ -23,18 +29,12 @@ function upload_action() {
         $author = $_POST['author'] ?? 'Nieznany';
         $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author);
     }
-    
-    // Powrót do galerii
-    $data = get_paginated_images(1, 3);
-    $model['images'] = $data['images'];
-    $model['page'] = 1;
-    $model['total_pages'] = ceil($data['total'] / 3);
-    $view_name = 'gallery_view';
-    include 'views/layout.php';
+    // Powrót do galerii po uploadzie
+    header("Location: index.php");
+    exit;
 }
 
-// --- NOWE KONTROLERY ---
-
+// 3. REJESTRACJA
 function register_action() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $login = $_POST['login'];
@@ -48,7 +48,6 @@ function register_action() {
         } else {
             $result = register_user($login, $email, $pass, $file);
             if ($result === true) {
-                // Sukces - przekieruj do logowania
                 header("Location: index.php?action=login&registered=1");
                 exit;
             } else {
@@ -60,38 +59,91 @@ function register_action() {
     include 'views/layout.php';
 }
 
+// 4. LOGOWANIE
 function login_action() {
-    // Jeśli zalogowany, nie pokazuj formularza
     if (isset($_SESSION['user_id'])) {
         header("Location: index.php");
         exit;
     }
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $login = $_POST['login'];
-        $pass = $_POST['password'];
-
-        if (login_user($login, $pass)) {
-            // Sukces
+        if (login_user($_POST['login'], $_POST['password'])) {
             header("Location: index.php");
             exit;
         } else {
             $model['error'] = "Błędny login lub hasło.";
         }
     }
-    
-    // Komunikat po rejestracji
     if (isset($_GET['registered'])) {
         $model['success'] = "Rejestracja udana! Zaloguj się.";
     }
-
     $view_name = 'login_view';
     include 'views/layout.php';
 }
 
+// 5. WYLOGOWANIE
 function logout_action() {
     session_destroy();
     header("Location: index.php");
+    exit;
+}
+
+// 6. DODAWANIE DO KOSZYKA (Zapamiętaj wybrane)
+function save_selected_action() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selected_ids'])) {
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+        }
+        foreach ($_POST['selected_ids'] as $id) {
+            if (!isset($_SESSION['cart'][$id])) {
+                $_SESSION['cart'][$id] = 1; // Domyślna ilość: 1
+            }
+        }
+    }
+    header("Location: index.php");
+    exit;
+}
+
+// 7. WIDOK KOSZYKA (Wyświetl zapamiętane)
+function saved_action() {
+    $model = [];
+    $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+    
+    if (!empty($cart)) {
+        $ids = array_keys($cart);
+        $images = get_images_by_ids($ids);
+        
+        foreach ($images as $img) {
+            $id = (string)$img['_id'];
+            $img['quantity'] = $cart[$id]; 
+            $model['images'][] = $img;
+        }
+    } else {
+        $model['images'] = [];
+    }
+    
+    $view_name = 'saved_view';
+    include 'views/layout.php';
+}
+
+// 8. AKTUALIZACJA KOSZYKA (Usuwanie / Zmiana ilości)
+function remove_selected_action() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Usuwanie
+        if (isset($_POST['remove_ids'])) {
+            foreach ($_POST['remove_ids'] as $id) {
+                unset($_SESSION['cart'][$id]);
+            }
+        }
+        // Zmiana ilości
+        if (isset($_POST['quantities'])) {
+            foreach ($_POST['quantities'] as $id => $qty) {
+                if (isset($_SESSION['cart'][$id]) && (int)$qty > 0) {
+                    $_SESSION['cart'][$id] = (int)$qty;
+                }
+            }
+        }
+    }
+    header("Location: index.php?action=saved");
     exit;
 }
 ?>

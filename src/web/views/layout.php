@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Projekt Galeria</title>
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <header>
@@ -23,6 +23,9 @@
             </div>
 
             <div class="header-right">
+                
+                <?php include __DIR__ . '/cart_partial.php'; ?>
+
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="index.php?action=logout" class="btn btn-logout">Wyloguj</a>
                 <?php else: ?>

@@ -1,4 +1,4 @@
-/* RESET */
+/* RESET I BAZA */
 * {
     margin: 0;
     padding: 0;
@@ -14,34 +14,31 @@ body {
     color: #333;
 }
 
-/* --- HEADER --- */
+/* HEADER */
 header {
     background-color: #222;
     color: white;
     width: 100%;
     height: 70px;
     display: flex;
-    /* Centruje kontener w pionie */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .header-container {
-    /* ROZCIĄGNIĘCIE NA CAŁĄ SZEROKOŚĆ */
     width: 100%;
-    padding: 0 40px;
-    /* Marginesy od krawędzi ekranu */
-
-    /* UKŁAD GRID: LEWO - ŚRODEK - PRAWO */
+    padding: 0 20px;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     height: 100%;
 }
 
-/* 1. LEWA STRONA */
+/* LEWA */
 .header-left {
     justify-self: start;
-    /* Przyklej do lewej */
     display: flex;
 }
 
@@ -49,6 +46,9 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 15px 5px 5px;
+    border-radius: 30px;
 }
 
 .avatar-circle {
@@ -65,26 +65,24 @@ header {
     color: #fff;
 }
 
-/* 2. ŚRODEK */
+/* ŚRODEK */
 .header-center {
     justify-self: center;
-    /* Przyklej do środka */
 }
 
 .site-title {
     color: white;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
     white-space: nowrap;
 }
 
-/* 3. PRAWA STRONA */
+/* PRAWA */
 .header-right {
     justify-self: end;
-    /* Przyklej do prawej */
     display: flex;
     align-items: center;
     gap: 20px;
@@ -94,13 +92,11 @@ header {
     color: #ccc;
     text-decoration: none;
     font-size: 14px;
-    font-weight: 500;
     transition: color 0.3s;
 }
 
 .link-text:hover {
     color: white;
-    text-decoration: underline;
 }
 
 .btn-logout {
@@ -110,14 +106,27 @@ header {
     text-decoration: none;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
 }
 
-.btn-logout:hover {
-    background-color: #c9302c;
+/* KOSZYK WIDGET */
+.cart-widget a {
+    color: #ffc107;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #ffc107;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: 0.3s;
 }
 
-/* --- RESZTA STRONY --- */
+.cart-widget a:hover {
+    background: #ffc107;
+    color: #222;
+}
+
+/* LAYOUT GŁÓWNY */
 main {
     flex: 1;
     width: 100%;
@@ -138,29 +147,29 @@ footer {
     font-size: 12px;
 }
 
-/* Formularze */
+/* FORMULARZE */
 .upload-section,
-.auth-section {
+.auth-section,
+.saved-section {
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 450px;
+    max-width: 600px;
     margin-bottom: 30px;
-    text-align: center;
 }
 
-.upload-section h2,
-.auth-section h2 {
-    margin-bottom: 20px;
-    color: #444;
+.upload-section,
+.auth-section {
+    text-align: center;
+    max-width: 450px;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 label {
@@ -192,7 +201,7 @@ button:hover {
     background-color: #218838;
 }
 
-/* Galeria */
+/* GALERIA */
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -226,24 +235,112 @@ button:hover {
 }
 
 .photo-info {
-    padding: 10px;
-    text-align: center;
-    border-top: 1px solid #f0f0f0;
+    padding: 12px;
     background: #fff;
+    border-top: 1px solid #f0f0f0;
 }
 
-.divider {
-    width: 100%;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
+/* ELEMENTY GALERII (CHECKBOXY) */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f0f0;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    cursor: pointer;
 }
 
-/* Komunikaty */
-.messages p,
-.error,
-.success {
+.checkbox-label:hover {
+    background: #e0e0e0;
+}
+
+.meta-data strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* PRZYCISKI AKCJI */
+.btn-save {
+    background: #007bff;
+    width: auto;
+    padding: 10px 20px;
+}
+
+.btn-save:hover {
+    background: #0069d9;
+}
+
+.cart-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-remove {
+    background: #dc3545;
+    flex: 1;
+}
+
+.btn-remove:hover {
+    background: #c82333;
+}
+
+.btn-update {
+    background: #17a2b8;
+    flex: 1;
+}
+
+.btn-update:hover {
+    background: #138496;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* INNE */
+.remove-label {
+    color: #dc3545;
+    margin-bottom: 5px;
+    cursor: pointer;
+    display: block;
+}
+
+.qty-label input {
+    width: 70px;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 3px;
+    background: #eee;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.pagination a.active {
+    background: #333;
+    color: white;
+}
+
+.messages p {
     padding: 10px;
-    margin-bottom: 10px;
     border-radius: 4px;
     text-align: left;
 }
@@ -256,18 +353,4 @@ button:hover {
 .success {
     background: #d4edda;
     color: #155724;
-}
-
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.pagination a {
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 0 2px;
-    background: #eee;
-    color: #333;
-    text-decoration: none;
 }
