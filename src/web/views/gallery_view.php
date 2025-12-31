@@ -9,7 +9,7 @@
             <?php foreach ($model['images'] as $img): ?>
                 <div class="photo-item">
                     <a href="images/<?php echo $img['original_name']; ?>" target="_blank">
-                        <img src="images/<?php echo $img['thumbnail_name']; ?>" alt="Foto">
+                        <img src="images/<?php echo $img['thumbnail_name']; ?>" alt="Okładka">
                     </a>
                     
                     <div class="photo-info">
@@ -19,7 +19,7 @@
                         ?>
                         <label class="checkbox-label">
                             <input type="checkbox" name="selected_ids[]" value="<?php echo $id; ?>" <?php echo $isChecked; ?>>
-                            <span>Wybierz</span>
+                            <span>Wybierz pozycję</span>
                         </label>
                         
                         <?php 
@@ -31,8 +31,8 @@
                             <small>Autor: <?php echo $author; ?></small>
 
                             <?php if (isset($img['privacy']) && $img['privacy'] === 'private'): ?>
-                                <small style="display: block; color: #d9534f; font-weight: bold; margin-top: 5px;">
-                                    🔒 Zdjęcie prywatne
+                                <small style="display: block; color: #e57373; font-weight: bold; margin-top: 5px; font-size: 11px;">
+                                    🔒 Tylko dla Ciebie
                                 </small>
                             <?php endif; ?>
                         </div>
@@ -40,7 +40,7 @@
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p style="grid-column: 1/-1; text-align: center;">Brak zdjęć do wyświetlenia.</p>
+            <p style="grid-column: 1/-1; text-align: center; color: #888;">Biblioteka jest pusta.</p>
         <?php endif; ?>
     </div>
 
@@ -59,7 +59,7 @@
 <hr class="divider">
 
 <section class="upload-section">
-    <h2>Dodaj zdjęcie</h2>
+    <h2>Dodaj nową książkę</h2>
     <?php if (isset($model['messages'])): ?>
         <div class="messages">
             <?php foreach ($model['messages'] as $msg): ?>
@@ -71,30 +71,33 @@
     <?php endif; ?>
 
     <form action="index.php?action=upload" method="POST" enctype="multipart/form-data">
-        <label>Tytuł: <input type="text" name="title" required></label>
+        <label>Tytuł książki: <input type="text" name="title" required placeholder="Wpisz tytuł..."></label>
 
         <?php if (isset($_SESSION['user_id'])): ?>
-            <label>Autor: 
-                <input type="text" name="author" value="<?php echo $_SESSION['user_login']; ?>" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+            <label>Autor dodający: 
+                <input type="text" name="author" value="<?php echo $_SESSION['user_login']; ?>" readonly style="cursor: not-allowed; opacity: 0.7;">
             </label>
             
-            <div class="privacy-settings" style="text-align: left; background: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px solid #eee;">
-                <span style="font-weight: bold; display: block; margin-bottom: 5px;">Widoczność zdjęcia:</span>
-                <label style="display: inline-block; margin-right: 15px; cursor: pointer; font-weight: normal;">
-                    <input type="radio" name="privacy" value="public" checked> Publiczne
+            <div class="privacy-settings" style="text-align: left; padding: 15px; border-radius: 4px;">
+                <span style="font-weight: bold; display: block; margin-bottom: 8px; color: #ccc;">Widoczność w bibliotece:</span>
+                <label style="display: inline-block; margin-right: 15px; cursor: pointer; font-weight: normal; background: none; border: none; padding: 0;">
+                    <input type="radio" name="privacy" value="public" checked> Publiczna
                 </label>
-                <label style="display: inline-block; cursor: pointer; font-weight: normal;">
-                    <input type="radio" name="privacy" value="private"> Prywatne
+                <label style="display: inline-block; cursor: pointer; font-weight: normal; background: none; border: none; padding: 0;">
+                    <input type="radio" name="privacy" value="private"> Prywatna
                 </label>
             </div>
 
         <?php else: ?>
-            <label>Autor: <input type="text" name="author" required></label>
-            <small style="color: #666;">Jako niezalogowany dodajesz zdjęcia publicznie.</small>
+            <label>Autor / Użytkownik: <input type="text" name="author" required placeholder="Twój nick..."></label>
+            <small>Jako gość dodajesz pozycje do katalogu publicznego.</small>
         <?php endif; ?>
 
-        <input type="file" name="photo" required style="margin-top: 10px;">
-        <button type="submit">Wyślij</button>
-        <small>Max 1MB, JPG/PNG</small>
+        <label style="margin-top: 10px;">Okładka (plik graficzny):
+            <input type="file" name="photo" required>
+        </label>
+        
+        <button type="submit">Dodaj do zbiorów</button>
+        <small>Max 1MB, formaty JPG/PNG</small>
     </form>
 </section>

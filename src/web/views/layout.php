@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Projekt Galeria</title>
+    <title>Galeria Książek</title>
     <link rel="stylesheet" href="static/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="header-center">
-                <a href="index.php" class="site-title">Moja Galeria</a>
+                <a href="index.php" class="site-title">Galeria Książek</a>
             </div>
 
             <div class="header-right">
@@ -42,7 +42,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Projekt WAI</p>
+        <p>&copy; 2025 Wirtualna Biblioteka. Wszelkie prawa zastrzeżone.</p>
     </footer>
 </body>
 </html>
