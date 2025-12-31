@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Galeria Książek</title>
+    <title>Galeria Książek - 280381</title>
     <link rel="stylesheet" href="static/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -42,7 +42,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Wirtualna Biblioteka. Wszelkie prawa zastrzeżone.</p>
+        <p>&copy; Hubert Strękowski 208381</p>
     </footer>
 </body>
 </html>
