@@ -29,12 +29,18 @@
                         <div class="meta-data">
                             <strong><?php echo $title; ?></strong>
                             <small>Autor: <?php echo $author; ?></small>
+
+                            <?php if (isset($img['privacy']) && $img['privacy'] === 'private'): ?>
+                                <small style="display: block; color: #d9534f; font-weight: bold; margin-top: 5px;">
+                                    🔒 Zdjęcie prywatne
+                                </small>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p style="grid-column: 1/-1; text-align: center;">Brak zdjęć w bazie.</p>
+            <p style="grid-column: 1/-1; text-align: center;">Brak zdjęć do wyświetlenia.</p>
         <?php endif; ?>
     </div>
 
@@ -66,8 +72,28 @@
 
     <form action="index.php?action=upload" method="POST" enctype="multipart/form-data">
         <label>Tytuł: <input type="text" name="title" required></label>
-        <label>Autor: <input type="text" name="author" required value="<?php echo isset($_SESSION['user_login']) ? $_SESSION['user_login'] : ''; ?>"></label>
-        <input type="file" name="photo" required>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <label>Autor: 
+                <input type="text" name="author" value="<?php echo $_SESSION['user_login']; ?>" readonly style="background-color: #e9ecef; cursor: not-allowed;">
+            </label>
+            
+            <div class="privacy-settings" style="text-align: left; background: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px solid #eee;">
+                <span style="font-weight: bold; display: block; margin-bottom: 5px;">Widoczność zdjęcia:</span>
+                <label style="display: inline-block; margin-right: 15px; cursor: pointer; font-weight: normal;">
+                    <input type="radio" name="privacy" value="public" checked> Publiczne
+                </label>
+                <label style="display: inline-block; cursor: pointer; font-weight: normal;">
+                    <input type="radio" name="privacy" value="private"> Prywatne
+                </label>
+            </div>
+
+        <?php else: ?>
+            <label>Autor: <input type="text" name="author" required></label>
+            <small style="color: #666;">Jako niezalogowany dodajesz zdjęcia publicznie.</small>
+        <?php endif; ?>
+
+        <input type="file" name="photo" required style="margin-top: 10px;">
         <button type="submit">Wyślij</button>
         <small>Max 1MB, JPG/PNG</small>
     </form>

@@ -54,8 +54,8 @@ function createThumbnail($sourcePath, $destPath, $fileType, $width, $height) {
     return true;
 }
 
-// 4. UPLOAD ZDJĘCIA DO GALERII
-function upload_image_business_logic($file, $title, $author) {
+// 4. UPLOAD ZDJĘCIA (Z PRYWATNOŚCIĄ)
+function upload_image_business_logic($file, $title, $author, $privacy = 'public') { // Nowy parametr
     $messages = [];
     $uploadDir = 'images/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -72,7 +72,6 @@ function upload_image_business_logic($file, $title, $author) {
             $thumbName = "thumbnail_" . $fileName;
             $thumbPath = $uploadDir . $thumbName;
             
-            // Miniaturka galerii 200x125
             createThumbnail($targetFilePath, $thumbPath, $fileType, 200, 125);
             
             try {
@@ -81,7 +80,8 @@ function upload_image_business_logic($file, $title, $author) {
                     'original_name' => $fileName,
                     'thumbnail_name' => $thumbName,
                     'title' => $title,
-                    'author' => $author
+                    'author' => $author,
+                    'privacy' => $privacy // Zapisujemy: 'public' lub 'private'
                 ]);
                 $messages[] = "Sukces: Zdjęcie zapisane!";
             } catch (Exception $e) {
@@ -94,15 +94,30 @@ function upload_image_business_logic($file, $title, $author) {
     return $messages;
 }
 
-// 5. PAGINACJA GALERII
-function get_paginated_images($page, $perPage) {
+// 5. PAGINACJA GALERII (FILTROWANIE PRYWATNOŚCI)
+function get_paginated_images($page, $perPage, $userLogin = null) {
     try {
         $db = get_db();
         $skip = ($page - 1) * $perPage;
-        $options = ['skip' => $skip, 'limit' => $perPage, 'sort' => ['_id' => -1]];
-        $cursor = $db->images->find([], $options);
         
-        $total = method_exists($db->images, 'countDocuments') ? $db->images->countDocuments() : $db->images->count();
+        // FILTR: Pokaż zdjęcia, które są PUBLICZNE (lub nie mają pola privacy)
+        // LUB zdjęcia, których autorem jest aktualnie zalogowany user
+        $filter = [
+            '$or' => [
+                ['privacy' => ['$ne' => 'private']], // Nie jest prywatne (czyli publiczne lub stare)
+                ['author' => $userLogin]             // Jest moje (nawet jak prywatne)
+            ]
+        ];
+
+        $options = ['skip' => $skip, 'limit' => $perPage, 'sort' => ['_id' => -1]];
+        
+        // Używamy filtra w zapytaniu
+        $cursor = $db->images->find($filter, $options);
+        
+        // Liczenie też musi uwzględniać filtr
+        $total = method_exists($db->images, 'countDocuments') 
+            ? $db->images->countDocuments($filter) 
+            : $db->images->count($filter);
 
         return ['images' => $cursor->toArray(), 'total' => $total];
     } catch (Exception $e) {
@@ -110,7 +125,7 @@ function get_paginated_images($page, $perPage) {
     }
 }
 
-// 6. LOGIKA UŻYTKOWNIKÓW (REJESTRACJA/LOGOWANIE)
+// 6. LOGIKA UŻYTKOWNIKÓW
 function register_user($login, $email, $password, $file) {
     $db = get_db();
     
@@ -130,7 +145,6 @@ function register_user($login, $email, $password, $file) {
     if ($file['size'] > 1048576) return "Błąd: Zdjęcie profilowe za duże.";
     if (!in_array($fileType, ['jpg', 'jpeg', 'png'])) return "Błąd: Zły format zdjęcia.";
 
-    // Miniaturka profilowa 100x100
     if (!createThumbnail($tempPath, $destPath, $fileType, 100, 100)) {
         return "Błąd przetwarzania zdjęcia profilowego.";
     }
@@ -163,7 +177,7 @@ function login_user($login, $password) {
     return false;
 }
 
-// 7. POBIERANIE WYBRANYCH ZDJĘĆ (DO KOSZYKA)
+// 7. POBIERANIE WYBRANYCH (Z KOSZYKA)
 function get_images_by_ids($ids) {
     if (empty($ids)) return [];
     

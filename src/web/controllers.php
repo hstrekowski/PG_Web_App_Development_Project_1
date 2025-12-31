@@ -1,43 +1,51 @@
 <?php
 require_once 'business.php';
 
-// 1. GALERIA
+// 1. GALERIA (FILTROWANIE PRYWATNOŚCI)
 function gallery_action() {
     $model = [];
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
     $perPage = 3; 
     
-    $data = get_paginated_images($page, $perPage);
+    // Sprawdzamy, kto jest zalogowany (żeby pokazać mu jego prywatne fotki)
+    $userLogin = isset($_SESSION['user_login']) ? $_SESSION['user_login'] : null;
+    
+    $data = get_paginated_images($page, $perPage, $userLogin);
     
     $model['images'] = $data['images'];
     $model['page'] = $page;
     $model['total_pages'] = ceil($data['total'] / $perPage);
     
-    // Przekazujemy koszyk
     $model['cart'] = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
     
     $view_name = 'gallery_view';
     include 'views/layout.php'; 
 }
 
-// 2. UPLOAD (NAPRAWIONE WYŚWIETLANIE BŁĘDÓW)
+// 2. UPLOAD (OBSŁUGA PRYWATNOŚCI)
 function upload_action() {
     $model = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         $title = $_POST['title'] ?? 'Bez tytułu';
-        $author = $_POST['author'] ?? 'Nieznany';
         
-        // Tutaj generują się błędy lub sukces
-        $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author);
+        // Logika dla zalogowanego vs niezalogowanego
+        if (isset($_SESSION['user_id'])) {
+            $author = $_SESSION['user_login']; // Autor automatycznie z sesji
+            $privacy = $_POST['privacy'] ?? 'public'; // Wybór z radia
+        } else {
+            $author = $_POST['author'] ?? 'Nieznany';
+            $privacy = 'public'; // Niezalogowani zawsze publiczne
+        }
+        
+        $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author, $privacy);
     }
     
-    // --- ZMIANA: Zamiast redirectu, ładujemy dane galerii i widok ---
-    // Dzięki temu zmienna $model['messages'] przetrwa i zostanie wyświetlona
-    
-    $page = 1; // Po uploadzie wracamy na pierwszą stronę
+    // Powrót do galerii (z odświeżeniem danych)
+    $page = 1;
     $perPage = 3;
-    $data = get_paginated_images($page, $perPage);
+    $userLogin = isset($_SESSION['user_login']) ? $_SESSION['user_login'] : null;
+    $data = get_paginated_images($page, $perPage, $userLogin);
     
     $model['images'] = $data['images'];
     $model['page'] = $page;
@@ -139,7 +147,7 @@ function saved_action() {
     include 'views/layout.php';
 }
 
-// 8. KOSZYK - USUWANIE/ZMIANA
+// 8. KOSZYK - ZMIANY
 function remove_selected_action() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['remove_ids'])) {
