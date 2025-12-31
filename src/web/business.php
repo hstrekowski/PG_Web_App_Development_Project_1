@@ -2,14 +2,14 @@
 // business.php
 
 // 1. AUTOLOAD
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+// Szukamy autoloadera poziom wyżej (../vendor) lub w tym samym katalogu (na wszelki wypadek)
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
-} elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
-    require_once __DIR__ . '/../../vendor/autoload.php';
 } else {
-    die("Błąd: Nie znaleziono biblioteki MongoDB.");
+    die("Błąd: Nie znaleziono biblioteki MongoDB. Sprawdź ścieżkę do vendor/autoload.php");
 }
-
 // 2. POŁĄCZENIE Z BAZĄ
 function get_db() {
     try {
