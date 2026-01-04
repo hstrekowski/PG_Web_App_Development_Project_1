@@ -1,6 +1,4 @@
-/* ================================================== */
-/* 1. RESET I BAZA (DARK MODE) */
-/* ================================================== */
+/* RESET & BASE */
 * {
     margin: 0;
     padding: 0;
@@ -10,9 +8,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #121212;
-    /* Bardzo ciemne tło (prawie czarne) */
     color: #e0e0e0;
-    /* Jasny szary tekst (nie razi jak czysta biel) */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -29,18 +25,14 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ================================================== */
-/* 2. HEADER (NAGŁÓWEK) */
-/* ================================================== */
+/* HEADER */
 header {
     background-color: #1e1e1e;
-    /* Ciemny grafit */
     color: white;
     width: 100%;
     height: 70px;
     display: flex;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    /* Mocny, elegancki cień */
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -53,13 +45,11 @@ header {
     margin: 0 auto;
     padding: 0 20px;
     display: grid;
-    /* Układ: Lewa - Środek - Prawa */
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     height: 100%;
 }
 
-/* LEWA STRONA HEADERU */
 .header-left {
     justify-self: start;
     display: flex;
@@ -70,7 +60,6 @@ header {
     align-items: center;
     gap: 10px;
     background: rgba(255, 255, 255, 0.05);
-    /* Subtelne tło */
     padding: 5px 15px 5px 5px;
     border-radius: 30px;
     border: 1px solid #333;
@@ -90,7 +79,6 @@ header {
     color: #ddd;
 }
 
-/* ŚRODEK HEADERU */
 .header-center {
     justify-self: center;
 }
@@ -111,7 +99,6 @@ header {
     text-decoration: none;
 }
 
-/* PRAWA STRONA HEADERU */
 .header-right {
     justify-self: end;
     display: flex;
@@ -130,11 +117,9 @@ header {
     color: #fff;
 }
 
-/* Przycisk Wyloguj */
 .btn-logout {
     background-color: #2d2d2d;
     color: #cf6679;
-    /* Zgaszona czerwień */
     padding: 6px 14px;
     text-decoration: none;
     border-radius: 4px;
@@ -150,22 +135,17 @@ header {
     text-decoration: none;
 }
 
-/* ================================================== */
-/* 3. WIDGET KOSZYKA (ZAPAMIĘTANE) */
-/* ================================================== */
+/* CART WIDGET */
 .cart-widget a {
     color: #ccc;
-    /* Jasny szary */
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
     border: 1px solid #444;
-    /* Ciemna ramka */
     padding: 6px 12px;
     border-radius: 4px;
     transition: all 0.3s;
     background: #252525;
-    /* Ciemne tło */
     display: inline-block;
 }
 
@@ -176,9 +156,7 @@ header {
     text-decoration: none;
 }
 
-/* ================================================== */
-/* 4. LAYOUT I KONTENERY */
-/* ================================================== */
+/* LAYOUT & CONTAINERS */
 main {
     flex: 1;
     width: 100%;
@@ -200,7 +178,6 @@ footer {
     border-top: 1px solid #333;
 }
 
-/* Kontenery sekcji (Upload, Logowanie, Koszyk) */
 .upload-section,
 .auth-section,
 .saved-section {
@@ -208,7 +185,6 @@ footer {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    /* Głęboki cień */
     width: 100%;
     max-width: 800px;
     margin-bottom: 30px;
@@ -230,9 +206,7 @@ h2 {
     padding-bottom: 10px;
 }
 
-/* ================================================== */
-/* 5. FORMULARZE I INPUTY */
-/* ================================================== */
+/* FORMS & INPUTS */
 form {
     display: flex;
     flex-direction: column;
@@ -246,7 +220,6 @@ label {
     color: #bbb;
 }
 
-/* Stylizacja pól tekstowych */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -254,7 +227,6 @@ input[type="file"],
 input[type="number"] {
     padding: 12px;
     background-color: #2d2d2d;
-    /* Ciemne tło pola */
     border: 1px solid #444;
     border-radius: 4px;
     width: 100%;
@@ -275,7 +247,6 @@ input[readonly] {
     cursor: not-allowed;
 }
 
-/* Ustawienia prywatności (Radio buttons) */
 .privacy-settings {
     background: #252525 !important;
     border: 1px solid #333 !important;
@@ -284,15 +255,10 @@ input[readonly] {
     border-radius: 4px;
 }
 
-/* ================================================== */
-/* 6. PRZYCISKI (STONOWANE) */
-/* ================================================== */
-
-/* Główny przycisk formularza (np. Wyślij, Zaloguj) */
+/* BUTTONS */
 button[type="submit"] {
     padding: 12px;
     background-color: #333;
-    /* Ciemny szary */
     color: #ddd;
     border: 1px solid #555;
     border-radius: 4px;
@@ -310,7 +276,6 @@ button[type="submit"]:hover {
     border-color: #888;
 }
 
-/* Przycisk "Zapamiętaj wybrane" */
 .btn-save {
     background: #2d2d2d;
     color: #ccc;
@@ -331,13 +296,10 @@ button[type="submit"]:hover {
     border-color: #666;
 }
 
-/* Przyciski w koszyku (Usuń / Zapisz) */
 .btn-remove {
     background: #261818;
-    /* Bardzo ciemny brąz */
     border: 1px solid #4a2c2c;
     color: #ef9a9a;
-    /* Zgaszony czerwony */
 }
 
 .btn-remove:hover {
@@ -347,7 +309,6 @@ button[type="submit"]:hover {
 
 .btn-update {
     background: #1a2428;
-    /* Ciemny granat */
     border: 1px solid #37474f;
     color: #90a4ae;
 }
@@ -372,9 +333,7 @@ button[type="submit"]:hover {
     text-decoration: none;
 }
 
-/* ================================================== */
-/* 7. GALERIA (SIATKA KSIĄŻEK) */
-/* ================================================== */
+/* GALLERY GRID */
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -402,7 +361,6 @@ button[type="submit"]:hover {
 
 .photo-item a {
     background: #121212;
-    /* Ciemne tło pod okładką */
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -416,7 +374,6 @@ button[type="submit"]:hover {
     height: auto;
     border-radius: 2px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-    /* Cień pod książką */
 }
 
 .photo-info {
@@ -425,7 +382,6 @@ button[type="submit"]:hover {
     border-top: 1px solid #333;
 }
 
-/* Checkbox w galerii */
 .checkbox-label {
     display: flex;
     align-items: center;
@@ -456,9 +412,7 @@ button[type="submit"]:hover {
     display: block;
 }
 
-/* ================================================== */
-/* 8. KOSZYK - SZCZEGÓŁY (SAVED VIEW) */
-/* ================================================== */
+/* SAVED VIEW DETAILS */
 .cart-controls {
     display: flex;
     gap: 15px;
@@ -505,9 +459,7 @@ button[type="submit"]:hover {
     padding: 5px;
 }
 
-/* ================================================== */
-/* 9. INNE ELEMENTY (PAGINACJA, WIADOMOŚCI) */
-/* ================================================== */
+/* PAGINATION & MESSAGES */
 .pagination {
     margin-top: 0;
     margin-bottom: 40px;
@@ -546,7 +498,6 @@ button[type="submit"]:hover {
     margin: 10px 0 40px 0;
 }
 
-/* Komunikaty błędów i sukcesów */
 .messages p {
     padding: 12px;
     border-radius: 4px;
@@ -556,14 +507,12 @@ button[type="submit"]:hover {
 
 .error {
     background: rgba(198, 40, 40, 0.2);
-    /* Półprzezroczysta czerwień */
     color: #ef9a9a;
     border: 1px solid #c62828;
 }
 
 .success {
     background: rgba(46, 125, 50, 0.2);
-    /* Półprzezroczysta zieleń */
     color: #a5d6a7;
     border: 1px solid #2e7d32;
 }
