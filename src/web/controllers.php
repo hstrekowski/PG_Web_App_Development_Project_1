@@ -1,14 +1,13 @@
 <?php
 require_once 'business.php';
 
-// 1. GALERIA (FILTROWANIE PRYWATNOŚCI)
+// 1. GALERIA
 function gallery_action() {
     $model = [];
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
     $perPage = 3; 
     
-    // Sprawdzamy, kto jest zalogowany (żeby pokazać mu jego prywatne fotki)
     $userLogin = isset($_SESSION['user_login']) ? $_SESSION['user_login'] : null;
     
     $data = get_paginated_images($page, $perPage, $userLogin);
@@ -23,25 +22,24 @@ function gallery_action() {
     include 'views/layout.php'; 
 }
 
-// 2. UPLOAD (OBSŁUGA PRYWATNOŚCI)
+// 2. UPLOAD
 function upload_action() {
     $model = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
         $title = $_POST['title'] ?? 'Bez tytułu';
         
-        // Logika dla zalogowanego vs niezalogowanego
+        
         if (isset($_SESSION['user_id'])) {
-            $author = $_SESSION['user_login']; // Autor automatycznie z sesji
-            $privacy = $_POST['privacy'] ?? 'public'; // Wybór z radia
+            $author = $_SESSION['user_login']; 
+            $privacy = $_POST['privacy'] ?? 'public';
         } else {
             $author = $_POST['author'] ?? 'Nieznany';
-            $privacy = 'public'; // Niezalogowani zawsze publiczne
+            $privacy = 'public'; 
         }
         
         $model['messages'] = upload_image_business_logic($_FILES['photo'], $title, $author, $privacy);
     }
     
-    // Powrót do galerii (z odświeżeniem danych)
     $page = 1;
     $perPage = 3;
     $userLogin = isset($_SESSION['user_login']) ? $_SESSION['user_login'] : null;

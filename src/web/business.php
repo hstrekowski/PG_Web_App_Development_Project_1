@@ -1,8 +1,5 @@
 <?php
-// business.php
-
 // 1. AUTOLOAD
-// Szukamy autoloadera poziom wyżej (../vendor) lub w tym samym katalogu (na wszelki wypadek)
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
 } elseif (file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -10,6 +7,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 } else {
     die("Błąd: Nie znaleziono biblioteki MongoDB. Sprawdź ścieżkę do vendor/autoload.php");
 }
+
 // 2. POŁĄCZENIE Z BAZĄ
 function get_db() {
     try {
@@ -54,8 +52,8 @@ function createThumbnail($sourcePath, $destPath, $fileType, $width, $height) {
     return true;
 }
 
-// 4. UPLOAD ZDJĘCIA (Z PRYWATNOŚCIĄ)
-function upload_image_business_logic($file, $title, $author, $privacy = 'public') { // Nowy parametr
+// 4. UPLOAD ZDJĘCIA
+function upload_image_business_logic($file, $title, $author, $privacy = 'public') {
     $messages = [];
     $uploadDir = 'images/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -81,7 +79,7 @@ function upload_image_business_logic($file, $title, $author, $privacy = 'public'
                     'thumbnail_name' => $thumbName,
                     'title' => $title,
                     'author' => $author,
-                    'privacy' => $privacy // Zapisujemy: 'public' lub 'private'
+                    'privacy' => $privacy 
                 ]);
                 $messages[] = "Sukces: Zdjęcie zapisane!";
             } catch (Exception $e) {
@@ -94,27 +92,24 @@ function upload_image_business_logic($file, $title, $author, $privacy = 'public'
     return $messages;
 }
 
-// 5. PAGINACJA GALERII (FILTROWANIE PRYWATNOŚCI)
+// 5. PAGINACJA GALERII
 function get_paginated_images($page, $perPage, $userLogin = null) {
     try {
         $db = get_db();
         $skip = ($page - 1) * $perPage;
         
-        // FILTR: Pokaż zdjęcia, które są PUBLICZNE (lub nie mają pola privacy)
-        // LUB zdjęcia, których autorem jest aktualnie zalogowany user
         $filter = [
             '$or' => [
-                ['privacy' => ['$ne' => 'private']], // Nie jest prywatne (czyli publiczne lub stare)
-                ['author' => $userLogin]             // Jest moje (nawet jak prywatne)
+                ['privacy' => ['$ne' => 'private']],
+                ['author' => $userLogin]             
             ]
         ];
 
         $options = ['skip' => $skip, 'limit' => $perPage, 'sort' => ['_id' => -1]];
         
-        // Używamy filtra w zapytaniu
+        
         $cursor = $db->images->find($filter, $options);
         
-        // Liczenie też musi uwzględniać filtr
         $total = method_exists($db->images, 'countDocuments') 
             ? $db->images->countDocuments($filter) 
             : $db->images->count($filter);
@@ -177,7 +172,7 @@ function login_user($login, $password) {
     return false;
 }
 
-// 7. POBIERANIE WYBRANYCH (Z KOSZYKA)
+// 7. POBIERANIE WYBRANYCH
 function get_images_by_ids($ids) {
     if (empty($ids)) return [];
     
